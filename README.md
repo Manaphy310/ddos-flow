@@ -254,7 +254,7 @@ IDはroot
 ## Botnet
 Botnetの構築には，LoaderとReport Serverが必要となっています．  
 本演習では，それらに関するサーバはあらかじめ作成しています．  
-そのため，Loaderを立ち上げることで，ボットネットを構築が可能となっています．
+そのため，Loaderを立ち上げることで，Botnetの構築が可能となっています．
 
 `/home/ubuntu/enviroment/malware/loader`
 に移動し，  
