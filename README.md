@@ -69,7 +69,7 @@ establish_connectionメソッドの最後に，以下のコードを追加して
     if (resolve_func != NULL)
         resolve_func();
 
-  //C2 Serverへ接続
+    //C2 Serverへ接続
     pending_connection = TRUE;
     connect(fd_serv, (struct sockaddr *)&srv_addr, sizeof (struct sockaddr_in));
 ```
@@ -78,7 +78,8 @@ C2 Serverのメインプログラムは，
 `/home/ubuntu/enviroment/malware/mirai/cnc/main.go`
 となっており，Go言語で記述されています．  
 C2 Serverは，Go言語とMySQLを組み合わせて構築していきます．  
-今回のプログラム作成では，データベースのIPアドレス，ユーザ名，パスワード，使用するテーブルを設定してもらいます．
+今回のプログラム作成では，データベースのIPアドレス，ユーザ名，パスワード，使用するテーブルを設定してもらいます．  
+10行目以降に，以下のコードを入力してください．
 ```
 const DatabaseAddr string = "127.0.0.1:3306" \\IPアドレス
 const DatabaseUser string = "root" \\ユーザ名
@@ -201,7 +202,7 @@ releaseディレクトリには，GoとSQLを組み合わせてC2 Serverを起�
 マルウェアを配布するDownload Serverを構築していきます．  
 Webサーバを立ち上げて，そこにマルウェアを格納することで作成してきます．
 
-まずは，
+まずは，新しくターミナルを開いて
 `sudo service apache2 start`  
 でWebサーバを起動します．
 
@@ -250,7 +251,7 @@ IDはroot
 ## Botnet
 Botnetの構築には，LoaderとReport Serverが必要となっています．  
 本演習では，それらに関するサーバはあらかじめ作成しています．  
-そのため，Loaderを立ち上げることで，ボットネットを構築していきます．
+そのため，Loaderを立ち上げることで，ボットネットを構築が可能となっています．
 
 `/home/ubuntu/enviroment/malware/loader`
 に移動し，  
@@ -292,7 +293,7 @@ DDoS攻撃の中で，最も使用されている攻撃は，上から二つ目�
 
 
 では，実際にコマンドを打って，攻撃を実行していきましょう．
-攻撃対象のサーバのIPアドレスは,`172.23.0.2`です．
+攻撃対象のサーバのIPアドレスは,`172.23.0.2`です．  
 pingコマンドで，サーバにアクセスできるか確認してください．
 
 今回は例としてHTTP GET Flood攻撃を実施していきます．
